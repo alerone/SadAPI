@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  sadApi:
+    image: my_sad_api
+    build: ./src 
+    ports: 
+    - "8080:8080"
+    depends_on:
+      - db
+    environment: 
+      POSTGRES_HOST: db
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "contraseña1234"
+      POSTGRES_DB: "todo_db"
+  
+  db:
+    image: postgres:latest
+    environment: 
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "contraseña1234"
+      POSTGRES_DB: "todo_db"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  
+volumes:
+  db_data:

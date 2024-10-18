@@ -1,16 +1,13 @@
 package main
 
 import (
+	"mysadapi/dataSource"
+	"mysadapi/models"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
-
-var ToDoTest = ToDo{ID: 1, Title: "Tarea de prueba", Description: "Descripción de prueba", DateTime: time.Now(), Completed: false}
-var nextID = 2
-var ToDos []ToDo = []ToDo{ToDoTest}
 
 func ConfigurarRutas(r *gin.Engine) {
 	r.GET("/", getToDos)
@@ -19,23 +16,33 @@ func ConfigurarRutas(r *gin.Engine) {
 	r.PUT("/:id", updateToDo)
 	r.DELETE("/:id", deleteToDo)
 	r.GET("/complete/:id", completeByID)
+	r.GET("/title/:title", getByTitle)
 }
 
 func getToDos(c *gin.Context) {
-	c.JSON(http.StatusOK, ToDos)
+	res, err := dataSource.GetToDos()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
 }
 
 func insertToDo(c *gin.Context) {
-	var newToDo ToDo
+	var newToDo models.ToDo
 	if err := c.ShouldBindJSON(&newToDo); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	newToDo.ID = nextID
-	newToDo.DateTime = time.Now()
-	nextID++
-	ToDos = append(ToDos, newToDo)
 
+	res, err := dataSource.CreateToDo(newToDo.Title, newToDo.Description, newToDo.Completed)
+	if err != nil {
+		c.JSON(http.StatusNotModified, gin.H{"error": "error trying to create the toDo"})
+		return
+	}
+	newToDo = res
 	c.JSON(http.StatusCreated, newToDo)
 }
 
@@ -44,14 +51,13 @@ func getToDoByID(c *gin.Context) {
 	if id == -1 {
 		return
 	}
-	for _, toDo := range ToDos {
-		if toDo.ID == id {
-			c.JSON(http.StatusOK, toDo)
-			return
-		}
+	res, err := dataSource.GetToDosWhere("id =", id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
 	}
 
-	c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not found!"})
+	c.JSON(http.StatusOK, res[0])
 }
 
 func updateToDo(c *gin.Context) {
@@ -59,30 +65,27 @@ func updateToDo(c *gin.Context) {
 	if id == -1 {
 		return
 	}
-	var updatedToDo ToDo
+	var updatedToDo models.ToDo
 	if err := c.ShouldBindJSON(&updatedToDo); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	for i, toDo := range ToDos {
-		if toDo.ID == id {
-			//Si se pasa el campo title vacío, no se debe actualizar como ""
-			if updatedToDo.Title == "" {
-				updatedToDo.Title = toDo.Title
-			}
-			if updatedToDo.Description == "" {
-				updatedToDo.Description = toDo.Description
-			}
-
-			updatedToDo.ID = toDo.ID
-			updatedToDo.DateTime = toDo.DateTime
-			ToDos[i] = updatedToDo
-			c.JSON(http.StatusOK, updatedToDo)
+	if updatedToDo.Title != "" {
+		err := dataSource.UpdateToDo(id, "title", updatedToDo.Title)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not found!"})
+		}
+	}
+	if updatedToDo.Description != "" {
+		err := dataSource.UpdateToDo(id, "description", updatedToDo.Description)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not found!"})
 			return
 		}
 	}
-	c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not found!"})
+
+	c.JSON(http.StatusOK, gin.H{"operation": "ToDo with ID " + strconv.Itoa(id) + " updated correctly!"})
 }
 
 func deleteToDo(c *gin.Context) {
@@ -90,14 +93,12 @@ func deleteToDo(c *gin.Context) {
 	if id == -1 {
 		return
 	}
-	for i, toDo := range ToDos {
-		if toDo.ID == id {
-			ToDos = append(ToDos[:i], ToDos[i+1:]...)
-			c.JSON(http.StatusOK, gin.H{"operation": "ToDo with ID " + strconv.Itoa(id) + " successfully deleted!"})
-			return
-		}
+	err := dataSource.DeleteToDo(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not deleted!"})
+		return
 	}
-	c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not found!"})
+	c.JSON(http.StatusOK, gin.H{"operation": "ToDo with ID " + strconv.Itoa(id) + " deleted correctly!"})
 }
 
 func completeByID(c *gin.Context) {
@@ -105,14 +106,26 @@ func completeByID(c *gin.Context) {
 	if id == -1 {
 		return
 	}
-	for _, toDo := range ToDos {
-		if toDo.ID == id {
-			toDo.Completed = true
-			c.JSON(http.StatusOK, toDo)
-			return
-		}
+
+	err := dataSource.UpdateToDo(id, "completed", true)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not found!"})
 	}
-	c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with ID " + strconv.Itoa(id) + " not found!"})
+	c.JSON(http.StatusOK, gin.H{"operation": "ToDo with ID " + strconv.Itoa(id) + " completed!"})
+}
+
+func getByTitle(c *gin.Context) {
+	title := "%" + c.Param("title") + "%"
+
+	res, err := dataSource.GetToDosWhere("title LIKE ", title)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "ToDo with title " + title + " not found!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, res)
+
 }
 
 func getIDFromQuery(c *gin.Context) int {
