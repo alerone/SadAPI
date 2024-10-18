@@ -15,7 +15,7 @@ Para desplegar el API en el dispositivo utilizamos docker-compose (se requiere d
 docker-compose up --build
 ```
 
-Al ejecutar esa línea por terminal ya estará todo el proyecto desplegado. Ahora falta realizar las consultas pertinentes al API en la dirección **localhost:8080** para gestionar tus ToDos. 😁
+Al ejecutar esa línea por terminal ya estará todo el proyecto desplegado. Ahora falta realizar las consultas pertinentes al API en la dirección **http://localhost:8080** para gestionar tus ToDos. 😁
 
 ## Uso 🧠
 
