@@ -32,10 +32,10 @@ Importante destacar que cuando pone `:id` o `:title` debes cambiar eso por el id
 
 La tecnología que se ha utilizado para el desarrollo del proyecto es:
 
-- [Golang](https://go.dev/) - Lenguaje de programación utilizado
+- ![Go](https://img.shields.io/badge/go-%2300ADD8.svg?style=for-the-badge&logo=go&logoColor=white) - Lenguaje de programación utilizado
 
 - [Gin](github.com/gin-gonic/gin) - Librería de Go para crear un API REST
 
 - [pq](github.com/lib/pq) - Librería de Go para manipular una base de datos en PostgreSQL
 
-- [docker](https://www.docker.com/) - Tecnología de para automatizar la implementación de aplicaciones en contenedores
+- ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) - Tecnología de para automatizar la implementación de aplicaciones en contenedores
