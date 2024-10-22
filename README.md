@@ -1,4 +1,7 @@
-# ToDo List API 📒
+# ToDo List API 📒 ![GitHub top language](https://img.shields.io/github/languages/top/alerone/SadAPI?color=%2377CDFF) ![GitHub last commit](https://img.shields.io/github/last-commit/alerone/SadAPI?color=%23bc0bbf) ![GitHub Created At](https://img.shields.io/github/created-at/alerone/SadAPI?color=%230dba69) ![GitHub repo size](https://img.shields.io/github/repo-size/alerone/SadAPI?color=%23390385)
+
+
+
 
 ## _Tarea para la asignatura SAD sobre los seminarios 1 y 2_
 
@@ -12,7 +15,7 @@ Para desplegar el API en el dispositivo utilizamos docker-compose (se requiere d
 docker-compose up --build
 ```
 
-Al ejecutar esa línea por terminal ya estará todo el proyecto desplegado. Ahora falta realizar las consultas pertinentes al API en la dirección **localhost:8080** para gestionar tus ToDos. 😁
+Al ejecutar esa línea por terminal ya estará todo el proyecto desplegado. Ahora falta realizar las consultas pertinentes al API en la dirección **http://localhost:8080** para gestionar tus ToDos. 😁
 
 ## Uso 🧠
 
