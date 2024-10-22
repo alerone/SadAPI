@@ -3,6 +3,7 @@ version: '3'
 services:
   sadApi:
     image: my_sad_api
+    container_name: todoApi
     build: ./src 
     ports: 
     - "8080:8080"

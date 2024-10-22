@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"mysadapi/logs"
 	"os"
 
 	_ "github.com/lib/pq"
@@ -45,5 +46,5 @@ func CreateToDoTable() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Table 'toDo' created if not exists!")
+	logs.PostLog("INFO", "Table 'toDo' created if not exists!")
 }
