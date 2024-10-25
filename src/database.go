@@ -14,7 +14,10 @@ var db *sql.DB
 
 func InitDB() {
 	host := os.Getenv("POSTGRES_HOST")
-	connection := "host=" + host + " user=user password=contraseña1234 dbname=todo_db sslmode=disable"
+	user := os.Getenv("POSTGRES_USER")
+	passwd := os.Getenv("POSTGRES_PASSWORD")
+	dbname := os.Getenv("POSTGRES_DB")
+	connection := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", host, user, passwd, dbname)
 	var err error
 	db, err = sql.Open("postgres", connection)
 	if err != nil {
