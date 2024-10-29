@@ -1,4 +1,4 @@
-package main
+package dataSource
 
 import (
 	"database/sql"
@@ -30,6 +30,8 @@ func InitDB() {
 	}
 
 	fmt.Println("Successfully connected to the PostgreSQL database")
+
+	CreateToDoTable()
 }
 
 func CreateToDoTable() {
@@ -50,4 +52,8 @@ func CreateToDoTable() {
 	}
 
 	logs.PostLog("INFO", "Table 'toDo' created if not exists!")
+}
+
+func CloseDatabase() {
+	db.Close()
 }

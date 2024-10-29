@@ -1,18 +1,11 @@
 package dataSource
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	"mysadapi/models"
 	"time"
 )
-
-var db *sql.DB
-
-func SetDB(database *sql.DB) {
-	db = database
-}
 
 func GetToDos() ([]models.ToDo, error) {
 	rows, err := db.Query("SELECT * FROM toDo")
