@@ -6,6 +6,7 @@ import (
 	"log"
 	"mysadapi/logs"
 	"os"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -25,8 +26,12 @@ func InitDB() {
 	}
 
 	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
+
+	for {
+		if err == nil {
+			break
+		}
+		time.Sleep(1 * time.Second)
 	}
 
 	fmt.Println("Successfully connected to the PostgreSQL database")
