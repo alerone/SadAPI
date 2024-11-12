@@ -16,11 +16,11 @@ Al ejecutar esa línea por terminal ya estará todo el proyecto desplegado. Ahor
 
 ### Explicación en detalle
 
-Para desplegar todo el sistema se utilizan dos contenedores: `SadAPI` y una base de datos `postgres`. Con [`docker compose`](./docker-compose.yaml) conseguimos automatizar el despliegue de ambos contenedores de forma que estos contenedores se pueden conectar para que el API obtenga los credenciales de la base de datos y su dirección.
+Para desplegar todo el sistema se utilizan dos contenedores: `todoApi` y una base de datos `postgres`. Con [`docker compose`](./docker-compose.yaml) conseguimos automatizar el despliegue de ambos contenedores de forma que estos contenedores se pueden conectar para que el API obtenga los credenciales de la base de datos y su dirección.
 
 Para guardar las credenciales fuera del archivo docker-compose he utilizado un archivo [`.env`](./src/.env) donde se almacena la información de usuario, contraseña y nombre de la base de datos.
 
-La imagen de la base de datos es una imagen `postgres:latest` que es extraída del registro público de Docker. La imagen SadApi, en cambio, es una imagen creada por mí ([SadApi Dockerfile](./src/Dockerfile)) que construye el código de la aplicación en la primera fase y luego extrae lo unicamente necesario al contenedor final para tener una imagen y un contenedor lo más liviano posible.
+La imagen de la base de datos es una imagen `postgres:latest` que es extraída del registro público de Docker. La imagen de todoApi es SadApi, que es una imagen creada por mí ([SadApi Dockerfile](./src/Dockerfile)) y construye el código de la aplicación en la primera fase para luego extraer lo únicamente necesario al contenedor final y obtener así una imagen y un contenedor lo más liviano posible.
 
 ## Uso 🧠
 
