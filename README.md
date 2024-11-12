@@ -97,4 +97,7 @@ Almacena la estructura de los datos de la aplicación, es decir de las ToDo.
 Módulo que se encarga de guardar la información de la sesión que se ha iniciado al desplegar el servicio en un archivo de logs dentro del contenedor SadApi.
 
 ## Opcional ℹ️ 🚀
-El contenedor donde se almacena la funcionalidad del API contiene un archivo de logs donde se guarda información relacionada a la sesión actual. Este archivo se puede acceder utilizando `docker exec -it todoApi /bin/bash` para interaccionar con el contenedor gracias a un terminal y observando el archivo de nomrbe "app.log".
+El contenedor donde se almacena la funcionalidad del API contiene un archivo de logs donde se guarda información relacionada a la sesión actual. Este archivo se puede acceder utilizando `docker exec -it todoApi /bin/sh` para interaccionar con el contenedor gracias a un terminal y observando el archivo de nomrbe "app.log".
+
+## WARNING ⚠️⚠️
+Es probable que la primera vez que se lanza el `docker-compose up --build` salte un error en la aplicación go debido a que no se ha inicializado correctamente la base de datos antes de que la aplicación intentó conectarse a esta. Si esto ocurre, sugiero volver a lanzar el comando `docker-compose up --build`.
