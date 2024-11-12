@@ -31,6 +31,7 @@ func InitDB() {
 		if err == nil {
 			break
 		}
+		fmt.Printf("There is an error: %s. Trying to reconnect", err.Error())
 		time.Sleep(1 * time.Second)
 	}
 
